@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 
 import Home from './components/Home';
@@ -43,12 +43,7 @@ class App extends Component {
         <Router>
           <Header isAuthenticated={isAuthenticated} />
           <Switch>
-            <PrivateRoute
-              exact
-              path="/"
-              isAuthenticated={isAuthenticated}
-              component={Home}
-            />
+            <Route exact path="/" component={Home} />
             <PrivateRoute
               path="/secret"
               isAuthenticated={isAuthenticated}
