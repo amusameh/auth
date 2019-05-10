@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+// this is not used for now. kept as a legacy :D
 export default function withAuth(ComponentToProtect) {
   return class extends Component {
     state = { loading: true };

@@ -16,18 +16,20 @@ class Login extends Component {
   };
 
   handleSubmit = e => {
-    const { updateAuthState, history } = this.props;
     e.preventDefault();
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
+
+    const { updateAuthState, history } = this.props;
     axios
       .post('/api/login', this.state)
       .then(() => {
         updateAuthState(true);
-        history.push('/');
+        history.push(from);
       })
       .catch(err => {
         // eslint-disable-next-line no-console
         console.log('err', err);
-        // how to handle this the best way??!!!
+        // ToDo!!: how to handle this the best way??!!!
       });
   };
 
