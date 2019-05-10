@@ -2,22 +2,22 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 class Secret extends Component {
+  state = { data: '' };
 
-  state = { data: ""}
   componentDidMount() {
-
-    axios.get('/api/secret')
+    axios
+      .get('/api/secret')
       .then(res => {
-        console.log('ress', res.data);
         this.setState({
-          data: res.data.msg,    
-        })
-    })
-    .catch(err => {
-      console.error('err', err);
-    })
+          data: res.data.msg,
+        });
+      })
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.error('err', err);
+      });
   }
-    
+
   render() {
     const { data } = this.state;
     return (
@@ -25,7 +25,7 @@ class Secret extends Component {
         <h2>Shhhh this is secret</h2>
         <p>{data && data}</p>
       </div>
-    )
+    );
   }
 }
 

@@ -13,12 +13,11 @@ const checkAuth = (req, res, next) => {
       if (err) {
         res.status(401).send('Unauthorized: Invalid token');
       } else {
-        console.log('decoded', decoded)
         req.user = decoded;
         next();
       }
-    })
+    });
   }
-}
+};
 
 module.exports = checkAuth;

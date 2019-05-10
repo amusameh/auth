@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 function PrivateRoute({ component: Component, ...rest }) {
   return (
@@ -11,8 +12,8 @@ function PrivateRoute({ component: Component, ...rest }) {
         ) : (
           <Redirect
             to={{
-              pathname: "/login",
-              state: { from: props.location }
+              pathname: '/login',
+              state: { from: props.location },
             }}
           />
         )
@@ -20,5 +21,11 @@ function PrivateRoute({ component: Component, ...rest }) {
     />
   );
 }
+
+PrivateRoute.propTypes = {
+  component: PropTypes.element.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  location: PropTypes.any.isRequired,
+};
 
 export default PrivateRoute;

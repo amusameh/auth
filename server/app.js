@@ -21,25 +21,20 @@ app.use(helmet());
 app.use(cors());
 app.use(compress());
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-// app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
 
-app.use((req, res, next) => {
-  console.log('req', req.url);
-  next();
-})
-
 app.use(authRouter);
-
-
 
 if (process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', 'client', 'build', 'index.html'));
+    res.sendFile(
+      path.join(__dirname, '..', '..', 'client', 'build', 'index.html')
+    );
   });
-  
+
   app.use(favicon(__dirname, '..', '..', 'client', 'build', 'favicon.ico'));
 }
 

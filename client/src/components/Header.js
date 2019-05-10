@@ -1,29 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-class Header extends Component {
+const Header = ({ isAuthenticated }) => {
+  return (
+    <div>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        {!isAuthenticated && (
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        )}
+        <li>
+          <Link to="/secret">Secret</Link>
+        </li>
+      </ul>
+    </div>
+  );
+};
 
-  render() {
-    const { isAuthenticated } = this.props;
-    console.log('isAuth', isAuthenticated);
-    return (
-      <div>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          { !isAuthenticated && (
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          )}
-          <li>
-            <Link to="/secret">Secret</Link>
-          </li>
-        </ul>
-      </div>
-    )
-  }
-}
+Header.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+};
 
 export default Header;

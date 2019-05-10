@@ -1,24 +1,24 @@
-import React, { Component } from "react";
-import { Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-class LoggedOutRoute extends Component {
-
-  render() {
-    const { component: Component, isAuthenticated, ...rest } = this.props;
-    return (
-      <Route
-        {...rest}
-        render={props => {
-          console.log('props', props)
-          return !isAuthenticated ?
+const LoggedOutRoute = ({ component: Component, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={props => {
+        return !rest.isAuthenticated ? (
           <Component {...rest} {...props} />
-          : 
-          <Redirect to="/"/>
-        }
-      }
-      />
-    );
-  }
+        ) : (
+          <Redirect to="/" />
+        );
+      }}
+    />
+  );
+};
+
+LoggedOutRoute.propTypes = {
+  component: PropTypes.element.isRequired,
 };
 
 export default LoggedOutRoute;
