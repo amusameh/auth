@@ -2,13 +2,14 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-function PrivateRoute({ component: Component, ...rest }) {
+function PrivateRoute({ component: Component, path, exact, ...rest }) {
   return (
     <Route
-      {...rest}
+      path={path}
+      exact={exact}
       render={props =>
         rest.isAuthenticated ? (
-          <Component {...props} />
+          <Component {...props} {...rest} />
         ) : (
           <Redirect
             to={{

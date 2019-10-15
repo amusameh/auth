@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 
 import Home from './components/Home';
-import Secret from './components/Secret';
+import Dashboard from './components/Dashboard';
 import Header from './components/Header';
 import Login from './components/Login';
+import SignUp from './components/SignUp';
 
 import PrivateRoute from './components/Auth/PrivateRoute';
 import LoggedOutRoute from './components/Auth/LoggedoutRoute';
@@ -14,46 +15,63 @@ class App extends Component {
   state = {
     isAuthenticated: false,
     loading: true,
+    email: null,
+    id: null,
+    name: null,
   };
 
   componentDidMount() {
     axios
       .get('/api/check-token')
-      .then(() => {
-        this.setState({ loading: false, isAuthenticated: true });
+      .then(({ data: userInfo }) => {
+        this.setState({
+          loading: false,
+          isAuthenticated: true,
+          ...userInfo,
+        });
       })
       .catch(() => {
         this.setState({ loading: false, isAuthenticated: false });
       });
   }
 
-  updateAuthState = authState => {
-    this.setState({ isAuthenticated: authState });
+  updateAuthState = userInfo => {
+    this.setState({ isAuthenticated: true, ...userInfo });
   };
 
   render() {
-    const { loading, isAuthenticated } = this.state;
+    const { loading, isAuthenticated, name, email, id } = this.state;
 
     if (loading) {
       return <div>Loading ....</div>;
     }
+
     return (
       <div className="App">
-        <h1>App</h1>
         <Router>
-          <Header isAuthenticated={isAuthenticated} />
+          <Header isAuthenticated={isAuthenticated} name={name} />
           <Switch>
             <Route exact path="/" component={Home} />
+
             <PrivateRoute
-              path="/secret"
+              path="/dashboard"
               isAuthenticated={isAuthenticated}
-              component={Secret}
+              component={Dashboard}
+              userInfo={{ email, id, name }}
             />
+
             <LoggedOutRoute
               path="/login"
-              updateAuthState={this.updateAuthState}
+              handleLoginSuccess={this.updateAuthState}
               isAuthenticated={isAuthenticated}
               component={Login}
+            />
+
+            <LoggedOutRoute
+              path="/signup"
+              handleLoginSuccess={this.updateAuthState}
+              isAuthenticated={isAuthenticated}
+              component={SignUp}
             />
           </Switch>
         </Router>

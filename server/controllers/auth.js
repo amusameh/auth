@@ -16,11 +16,17 @@ exports.login = (req, res, next) => {
         }
 
         // issue a token
-        const payload = { email };
+        const payload = { email, name: user.name, id: user._id };
         const token = jwt.sign(payload, process.env.SECRET, {
           expiresIn: '1h',
         });
-        return res.cookie('token', token, { httpOnly: true }).sendStatus(200);
+        return res
+          .status(200)
+          .cookie('token', token, {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60,
+          })
+          .json(payload);
       })
       .catch(err => {
         return res
@@ -31,19 +37,29 @@ exports.login = (req, res, next) => {
 };
 
 exports.register = (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, name } = req.body;
   // validation (usually should be Joi)
   if (!email || !password) {
     res.send({ err: 'Required fields' });
     return;
   }
 
-  const newUser = new User({ email, password });
+  const newUser = new User({ email, name, password });
 
   newUser
     .save()
     .then(() => {
-      res.status(200).send({ msg: 'welcome to the clup' });
+      const payload = { email, name, id: newUser._id };
+      const token = jwt.sign(payload, process.env.SECRET, {
+        expiresIn: '1h',
+      });
+      return res
+        .status(200)
+        .cookie('token', token, {
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60,
+        })
+        .json(payload);
     })
     .catch(err =>
       res.status(500).send(`Error registering new user please try again.${err}`)
@@ -51,5 +67,6 @@ exports.register = (req, res) => {
 };
 
 exports.checkToken = (req, res) => {
-  res.send();
+  const { user } = req;
+  res.send(user);
 };

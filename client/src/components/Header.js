@@ -1,24 +1,50 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-const Header = ({ isAuthenticated }) => {
+const Li = styled.li`
+  margin: 0 2rem;
+  list-style: none;
+`;
+const Wrapper = styled.div`
+  padding: 1rem;
+  background-color: #a34bc33d;
+
+  .active {
+    font-size: 18px;
+    font-weight: 900;
+  }
+`;
+
+const Header = ({ isAuthenticated, name }) => {
   return (
-    <div>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
+    <Wrapper>
+      <ul style={{ display: 'flex', margin: '0' }}>
+        <Li>
+          <NavLink to="/">Home</NavLink>
+        </Li>
         {!isAuthenticated && (
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
+          <>
+            <Li>
+              <NavLink to="/login">Login</NavLink>
+            </Li>
+            <Li>
+              <NavLink to="/signup">Sign Up</NavLink>
+            </Li>
+          </>
         )}
-        <li>
-          <Link to="/secret">Secret</Link>
-        </li>
+        <Li>
+          <NavLink to="/dashboard">Dashboard</NavLink>
+        </Li>
+
+        {isAuthenticated && (
+          <Li>
+            <span>Hi: {name}</span>
+          </Li>
+        )}
       </ul>
-    </div>
+    </Wrapper>
   );
 };
 

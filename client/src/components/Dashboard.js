@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-class Secret extends Component {
+class Dashboard extends Component {
   state = { data: '' };
 
   componentDidMount() {
@@ -20,13 +20,18 @@ class Secret extends Component {
 
   render() {
     const { data } = this.state;
+    const { userInfo } = this.props;
+    const { name, email, id } = userInfo;
     return (
       <div>
-        <h2>Shhhh this is secret</h2>
+        <h1>Dashboard Page</h1>
+        <h5>your name is: {name}</h5>
+        <h5>your email is: {email}</h5>
+        <h5>your id is: {id}</h5>
         <p>{data && data}</p>
       </div>
     );
   }
 }
 
-export default Secret;
+export default Dashboard;
