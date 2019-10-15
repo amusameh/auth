@@ -3,6 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const LoggedOutRoute = ({ component: Component, ...rest }) => {
+  console.log({ rest });
   return (
     <Route
       {...rest}

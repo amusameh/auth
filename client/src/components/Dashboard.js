@@ -21,10 +21,12 @@ class Dashboard extends Component {
   render() {
     const { data } = this.state;
     const { userInfo } = this.props;
-    const { name, email, id } = userInfo;
+    const { name, email, id, role } = userInfo;
     return (
       <div>
         <h1>Dashboard Page</h1>
+
+        <h5>your role is: {role}</h5>
         <h5>your name is: {name}</h5>
         <h5>your email is: {email}</h5>
         <h5>your id is: {id}</h5>

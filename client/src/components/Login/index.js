@@ -54,7 +54,6 @@ export default class Login extends Component {
                   type="email"
                   name="email"
                   id="email"
-                  data-test-id="email"
                   onChange={this.handleInputChange}
                   required
                 />
@@ -67,16 +66,13 @@ export default class Login extends Component {
                   type="password"
                   name="password"
                   id="password"
-                  data-test-id="password"
                   onChange={this.handleInputChange}
                   required
                 />
               </Label>
             </FormGroup>
             {err && <p>{err}</p>}
-            <Button type="submit" data-test-id="submit">
-              LogIn
-            </Button>
+            <Button type="submit">LogIn</Button>
           </Form>
         </FormWrapper>
       </>

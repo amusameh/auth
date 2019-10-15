@@ -15,6 +15,7 @@ export default class Login extends Component {
     email: null,
     password: null,
     name: null,
+    role: null,
     err: null,
   };
 
@@ -26,13 +27,14 @@ export default class Login extends Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const { email, password, name } = this.state;
+    const { email, password, name, role } = this.state;
     const { handleLoginSuccess } = this.props;
     try {
       const { data } = await axios.post('/api/register', {
         email,
         name,
         password,
+        role,
       });
       return handleLoginSuccess(data);
     } catch (error) {
@@ -58,7 +60,6 @@ export default class Login extends Component {
                   type="email"
                   name="email"
                   id="email"
-                  data-test-id="email"
                   onChange={this.handleInputChange}
                   required
                 />
@@ -72,7 +73,19 @@ export default class Login extends Component {
                   type="name"
                   name="name"
                   id="name"
-                  data-test-id="name"
+                  onChange={this.handleInputChange}
+                  required
+                />
+              </Label>
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="role">
+                Role
+                <Input
+                  type="role"
+                  name="role"
+                  id="role"
                   onChange={this.handleInputChange}
                   required
                 />
@@ -86,16 +99,13 @@ export default class Login extends Component {
                   type="password"
                   name="password"
                   id="password"
-                  data-test-id="password"
                   onChange={this.handleInputChange}
                   required
                 />
               </Label>
             </FormGroup>
             {err && <p>{err}</p>}
-            <Button type="submit" data-test-id="submit">
-              Sign Up
-            </Button>
+            <Button type="submit">Sign Up</Button>
           </Form>
         </FormWrapper>
       </>

@@ -11,6 +11,8 @@ import SignUp from './components/SignUp';
 import PrivateRoute from './components/Auth/PrivateRoute';
 import LoggedOutRoute from './components/Auth/LoggedoutRoute';
 
+import routes from './routes';
+
 class App extends Component {
   state = {
     isAuthenticated: false,
@@ -18,6 +20,7 @@ class App extends Component {
     email: null,
     id: null,
     name: null,
+    role: null,
   };
 
   componentDidMount() {
@@ -40,7 +43,7 @@ class App extends Component {
   };
 
   render() {
-    const { loading, isAuthenticated, name, email, id } = this.state;
+    const { loading, isAuthenticated, name, email, id, role } = this.state;
 
     if (loading) {
       return <div>Loading ....</div>;
@@ -51,28 +54,43 @@ class App extends Component {
         <Router>
           <Header isAuthenticated={isAuthenticated} name={name} />
           <Switch>
-            <Route exact path="/" component={Home} />
-
-            <PrivateRoute
-              path="/dashboard"
-              isAuthenticated={isAuthenticated}
-              component={Dashboard}
-              userInfo={{ email, id, name }}
-            />
-
-            <LoggedOutRoute
-              path="/login"
-              handleLoginSuccess={this.updateAuthState}
-              isAuthenticated={isAuthenticated}
-              component={Login}
-            />
-
-            <LoggedOutRoute
-              path="/signup"
-              handleLoginSuccess={this.updateAuthState}
-              isAuthenticated={isAuthenticated}
-              component={SignUp}
-            />
+            {routes.map(route => {
+              const {
+                path,
+                exact,
+                component,
+                isPrivate,
+                shouldBeLoggedOut,
+                allowedRoles,
+              } = route;
+              console.log({ route });
+              if (isPrivate) {
+                return (
+                  <PrivateRoute
+                    path={path}
+                    exact={exact}
+                    component={component}
+                    allowedRoles={allowedRoles}
+                    isAuthenticated={isAuthenticated}
+                    userInfo={{ email, id, name, role }}
+                    role={role}
+                  />
+                );
+              }
+              if (shouldBeLoggedOut) {
+                return (
+                  <LoggedOutRoute
+                    path={path}
+                    exact={exact}
+                    component={component}
+                    allowedRoles={allowedRoles}
+                    handleLoginSuccess={this.updateAuthState}
+                    isAuthenticated={isAuthenticated}
+                  />
+                );
+              }
+              return <Route path={path} exact={exact} component={component} />;
+            })}
           </Switch>
         </Router>
       </div>

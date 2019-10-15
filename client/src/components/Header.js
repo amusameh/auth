@@ -37,6 +37,15 @@ const Header = ({ isAuthenticated, name }) => {
         <Li>
           <NavLink to="/dashboard">Dashboard</NavLink>
         </Li>
+        <Li>
+          <NavLink to="/admin">Admin</NavLink>
+        </Li>
+        <Li>
+          <NavLink to="/user">User</NavLink>
+        </Li>
+        <Li>
+          <NavLink to="/both">Both</NavLink>
+        </Li>
 
         {isAuthenticated && (
           <Li>
