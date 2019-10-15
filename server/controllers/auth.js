@@ -16,7 +16,12 @@ exports.login = (req, res, next) => {
         }
 
         // issue a token
-        const payload = { email, name: user.name, id: user._id };
+        const payload = {
+          email,
+          name: user.name,
+          role: user.role,
+          id: user._id,
+        };
         const token = jwt.sign(payload, process.env.SECRET, {
           expiresIn: '1h',
         });
@@ -37,19 +42,19 @@ exports.login = (req, res, next) => {
 };
 
 exports.register = (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, name, role } = req.body;
   // validation (usually should be Joi)
   if (!email || !password) {
     res.send({ err: 'Required fields' });
     return;
   }
 
-  const newUser = new User({ email, name, password });
+  const newUser = new User({ email, name, role, password });
 
   newUser
     .save()
     .then(() => {
-      const payload = { email, name, id: newUser._id };
+      const payload = { email, name, role, id: newUser._id };
       const token = jwt.sign(payload, process.env.SECRET, {
         expiresIn: '1h',
       });
@@ -61,9 +66,12 @@ exports.register = (req, res) => {
         })
         .json(payload);
     })
-    .catch(err =>
-      res.status(500).send(`Error registering new user please try again.${err}`)
-    );
+    .catch(err => {
+      console.log(err);
+      res
+        .status(500)
+        .send(`Error registering new user please try again.${err}`);
+    });
 };
 
 exports.checkToken = (req, res) => {
